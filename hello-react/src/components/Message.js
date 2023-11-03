@@ -17,3 +17,5 @@ const Message = () => {
 }
 
 export default Message;
+
+//자바스크립트 함수는 모두 객체이다. (객체의 불변성)

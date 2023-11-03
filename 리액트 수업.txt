@@ -51,6 +51,18 @@ this의 정의
 *화살표 함수에 정의한 this는 window로 정의되고, 화살표 함수에 정의되지 않은 this는 아직 정의되지 않았다.
 화살표 함수는 정의한 시점에 this가 결정 되어있다. 일반적인 함수에 this는 정의되지 않는다.
 
+const person = {
+  name : "이이름",
+  age : 30,
+  showInfo : function() {
+    console.log(this)  ------> 여기서 this는 뭘 가리키는지 알수 없다. 호출을 해야지만 가능하다.
+  }
+};
+
+person.showInfo를 호출해야 this가 가리킨다라고 할수 있다.
+this는 바뀔수 있다.
+
+
 
 
 함수 형 컴포넌트
@@ -60,11 +72,175 @@ useState Hook을 사용하여 구현
 MDN 사이트
 
 
+-----------------------------------------------------------------------------------------------
+
+함수 EC 평가 방법
+
+var num1 = 5;
+function inner( ){
+  var num2 = 10;
+
+  function outer( ){
+    var num3 = 20;
+
+    return num1 + num2 + num3;
+  }
+  var result = inner( );
+  console.log(result);
+}
+  
+
+         ↓
+
+Global EC {
+  변수 레코드 : {
+	window.num1 = 5 
+  }
+  외부 EC 변수 레코드 참조 : null
+
+  this 바인딩 : window
+}
+
+
+outer EC{
+  변수 레코드 {
+	num2 : 10
+  }
+  외부 EC 변수 레코드 참조 : Global EC 변수 레코드 참조
+
+  this 바인딩 : 함수를 호출한 객체 참조
+}
+
+
+inner( ) -> inner EC
+
+inner EC {
+  변수 레코드 {
+	num3 : 20
+  }
+  외부 EC 변수 레코드 참조 : outer EC 변수 레코드 참조
+
+  this 바인딩 : 함수를 호출한 객체 참조
+}
 
 
 
 
 
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+
+
+이벤트 핸들링
+1. 리액트의 이벤트 시스템
+  - 웹 브라우저의 HTML 이벤트와 인터페이스가 동일하기 때문에 사용법이 비슷
+
+2. 이벤트를 사용할 때 주의 사항 ★★★
+1) 이벤트 이름은 카멜표기법으로 작성
+  onclick -> onClick
+
+2) 이벤트에 실행할 자바스크립트 코드를 전달하는 것이 아니라, 함수 형태의 값을 전달
+
+3) DOM 요소에만 이벤트를 설정할 수 있음
+
+
+3. 이벤트 핸들링 익히기
+  - onChange 이벤트 핸들링하기
+1) state에 input 값 담기
+2) 버튼을 누를 때 comment
+
+
+=================================================================
+
+새 프로젝트 만들기
+
+1.  yarn create react-app project -> (리액트)
+
+2.  npm init react-app project     -> (cmd)
+
+3.
+.prettierrc : 설정 파일
+{
+    "singleQuote": true,
+    "semi" : true,
+    "useTabs": false,
+    "tabWidth": 2,
+    "printWidth": 80,
+    "trailingComma": "all"
+}
+
+
+  react-i18next   -> 메세지, 다국어 
+
+4.  yarn add i18next react-i18next
+
+5. src -> i18n.js 파일 추가
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+
+6. src -> langs 폴더 추가 -> ko.js / en.js 파일 추가
+export default {};
+
+7. 
+import ko from './langs/ko';
+import en from './langs/en';
+
+추가
+
+const resources = {
+    //언어키
+    en : { //언어코드
+        translation : en,  //언어 데이터
+    },
+    ko : {
+        translation : ko,
+    },
+};
+
+i18n
+    .use(initReactI18next)
+    .inti({
+        resources,
+        lng : "ko",
+    });
+
+입력
+
+
+* Ctrl + c : 폼 정지
+
+8. langs -> commons_ko.js / commons_en.js 추가
+9. langs -> errors_ko.js / errors_en.js 추가
+10. langs -> validations_ko.js / validations_en.js 추가
+
+export default {};
+
+11. ko.js에 import하기 (ko.js / en.js 동일하게 작성)
+
+import commons from './commons_ko';
+import errors from './errors_ko';
+import validations from './validations_ko';
+
+export default { ...commons, ...errors, ...validations };
+
+
+=================================================================
+
+값을 펼쳐준다.(전개 연산자)
+ ...  -> 각각의 객체 혹은 숫자 등등 값을 펼쳐서 보여준다. (하나로 통합된다)
+         값을 복사한다. (다른 객체를 지정하면 바꿀수 있다.)
+
+
+12. src -> components 폴더 생성 : 보이는 부분
+13. src -> containers 폴더 생성 : 데이터 통제 부분
+14. containers -> member 폴더 생성 -> LoginContainer.js 파일 생성
+15 components -> member 폴더 생성
 
 
 
